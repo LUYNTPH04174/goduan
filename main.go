@@ -9,6 +9,7 @@ import (
 func main() {
 	r := gin.Default()
 
+	r.GET("/",route.HomeDefault)
 	r.GET("/login",route.GetLoginAnUser)
 	rgroup:=r.Group("/app")
 	{

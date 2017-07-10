@@ -9,6 +9,12 @@ import (
 
 var controller=database.NewUserController()
 
+func HomeDefault(c *gin.Context) {
+	c.JSON(http.StatusOK,gin.H{
+		"message": "OK" ,
+		"status":http.StatusOK})
+}
+
 func Login(c *gin.Context) {
 		firstname := c.Param("sdt")
 		lastname := c.Param("pass") // shortcut for c.Request.URL.Query().Get("lastname")
@@ -34,7 +40,6 @@ func InsertAnUserRouter(c *gin.Context){
 func GetLoginAnUser(c *gin.Context) {
 	sdt:=c.Query("sdt")
 	password:=c.Query("pass")
-
 	if controller.GetAnUser(sdt,password){
 		c.JSON(http.StatusOK,gin.H{
 		"message": "OK" ,
