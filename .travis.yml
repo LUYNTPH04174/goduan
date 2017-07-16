@@ -13,6 +13,9 @@ before_install:
   - go get -v github.com/golang/lint/golint
   - go get -v gopkg.in/mgo.v2
   - go get -v github.com/gin-gonic/gin
+  - go get -v github.com/kardianos/govendor
 script:
   - ./pre-commit
   - go test -cpu=1,2 -v -tags integration ./...
+  - govendor list
+  
