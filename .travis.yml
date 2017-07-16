@@ -24,3 +24,10 @@ os:
 addons:
     packages:
       - iproute2
+
+before_deploy: "echo 'ready?'"
+deploy:
+  provider: firebase
+  token:
+    secure: "c6Cj88skn7_t_OGOc0b6b_OYXY4LYrpAonQ3nnMsRPk"
+  project: "weedz"
