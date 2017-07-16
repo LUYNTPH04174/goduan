@@ -17,10 +17,11 @@ script:
   # - ./pre-commit
   - govendor list
   - go test -cpu=1,2 -v -tags integration ./...
-
+  - /sbin/ifconfig
 os:
   - linux
 
 addons:
   hosts:
-    - travis.dev
+    packages:
+      - net-tools
