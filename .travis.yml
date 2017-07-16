@@ -4,10 +4,9 @@ go:
   - 1.8
 
 services:
-  - rabbitmq
-
+  - mongodb
 env:
- - AMQP_URL=amqp://guest:guest@127.0.0.1:5672/
+ - PORT=8080
 
 before_install:
   - go get -v github.com/golang/lint/golint
@@ -18,3 +17,7 @@ script:
   # - ./pre-commit
   - govendor list
   - go test -cpu=1,2 -v -tags integration ./...
+
+os:
+  - linux
+  - osx
