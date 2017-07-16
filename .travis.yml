@@ -16,6 +16,5 @@ before_install:
   - go get -v github.com/kardianos/govendor
 script:
   - ./pre-commit
-  - go test -cpu=1,2 -v -tags integration ./...
   - govendor list
-  
+  - go test -cpu=1,2 -v -tags integration ./...
