@@ -3,6 +3,12 @@
 	"ignore": "test",
 	"package": [
 		{
+			"checksumSHA1": "7kORJz47tdrWiUnsZo5w/D3ZncM=",
+			"path": "github.com/LUYNTPH04174/goduan",
+			"revision": "4654e7d4483368c8cdf197607c35c20bad1a8f47",
+			"revisionTime": "2017-07-16T16:02:17Z"
+		},
+		{
 			"checksumSHA1": "BhMowD2DIKSd9qq8Pzh7Y3mh2/w=",
 			"path": "github.com/gin-contrib/sse",
 			"revision": "22d885f9ecc78bf4ee5d72b937e4bbcdc58e8cae",
