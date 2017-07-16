@@ -3,11 +3,11 @@ package main
 import (
 	"github.com/gin-gonic/gin"
  	"goduan/route"
- 	"os"
+ 	// "os"
 )
 
 func main() {
-	port:=os.Getenv("PORT")
+	// port:=os.Getenv("PORT")
 	r := gin.Default()
 
 	r.GET("/",route.HomeDefault)
@@ -17,5 +17,6 @@ func main() {
 		rgroup.POST("/post",route.InsertAnUserRouter)
 	}
 	
-	r.Run(":"+port)
+	// r.Run(":"+port)
+	r.Run(":8080")
 }
