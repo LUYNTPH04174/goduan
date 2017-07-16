@@ -17,11 +17,10 @@ script:
   # - ./pre-commit
   - govendor list
   - go test -cpu=1,2 -v -tags integration ./...
-  - /sbin/ifconfig
+  - ip a
 os:
   - linux
 
 addons:
-  hosts:
     packages:
-      - net-tools
+      - iproute2
