@@ -27,6 +27,7 @@ addons:
 
 before_deploy: "echo 'ready?'"
 deploy:
+  skip_cleanup: true
   provider: firebase
   token:
     secure: "c6Cj88skn7_t_OGOc0b6b_OYXY4LYrpAonQ3nnMsRPk"
