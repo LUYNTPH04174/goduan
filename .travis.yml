@@ -20,4 +20,7 @@ script:
 
 os:
   - linux
-  - osx
+
+addons:
+  hosts:
+    - travis.dev
