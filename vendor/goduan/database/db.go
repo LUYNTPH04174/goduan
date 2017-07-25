@@ -115,6 +115,6 @@ func (uc *UserController) GetCategoryCount() int {
 	return count
 }
 
-func (uc *UserController) UpdateProfileValue(pro Profile) (bool,mess){
+// func (uc *UserController) UpdateProfileValue(pro Profile) (bool,mess){
 	
-}
+// }

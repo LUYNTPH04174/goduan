@@ -89,6 +89,6 @@ func GetCategorys(c *gin.Context) {
 	}
 }
 
-func UpdateProfile(c *gin.Context) {
+// func UpdateProfile(c *gin.Context) {
 	
-}
+// }

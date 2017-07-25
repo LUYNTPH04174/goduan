@@ -16,6 +16,7 @@ before_install:
 script:
   # - ./pre-commit
   - govendor list
+  - go test -cpu=1,2 -v -tags integration ./...
   - ip a
 os:
   - linux
