@@ -43,13 +43,13 @@ func NewUserController() *UserController {
 func (uc *UserController) InsertAnUser(user model.User) (bool,string){
 	exist:=uc.session.DB(AuthDatabase).C("users").Find(bson.M{"email":user.Email}).Select(nil).One(&model.User{})
 	if exist==nil{
-		return false,"Email da duoc su dung"
+		return false,"Email đã được sử dụng"
 	}
 	err:=uc.session.DB(AuthDatabase).C("users").Insert(user)
 	if err != nil {
-		return false,"loi"
+		return false,"False"
 	}
-	return true,"thanh cong"
+	return true,"Success"
 }
 
 func (uc *UserController) GetAnUser(email, pass string) (bool,model.User) {
@@ -81,7 +81,16 @@ func (uc *UserController) InsertAProfile(profile model.Profile) bool{
 	return true
 }
 
+func (uc *UserController) GetProfileWithUser(profile_id string) (bool,model.Profile) {
+	c := uc.session.DB(AuthDatabase).C("profile")
+	pro := model.Profile{}
+	err := c.Find(bson.M{"profile_id": profile_id}).Select(nil).One(&pro)
+	if err != nil{
+		return false,pro
+	}
 
+	return true,pro
+}
 
 
 func(uc *UserController) GetAllCategory()	([]model.Category,int){
@@ -104,4 +113,8 @@ func (uc *UserController) GetCategoryCount() int {
 	count,_:=uc.session.DB(AuthDatabase).C("category").Count()
 
 	return count
+}
+
+func (uc *UserController) UpdateProfileValue(pro Profile) (bool,mess){
+	
 }

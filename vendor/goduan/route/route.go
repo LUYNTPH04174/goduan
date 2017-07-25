@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 	// "encoding/json"
+	"time"
 )
 
 var controller = database.NewUserController()
@@ -23,45 +24,39 @@ func InsertAnUserRouter(c *gin.Context) {
 	pass := c.PostForm("pass")
 	facebookid := c.PostForm("facebook_id")
 	profile_id:=strconv.Itoa(controller.GetUsersCount()+1)
-	create_at:=c.PostForm("create_at")
-	updated_at:=c.PostForm("updated_at")
-	// create_by:=c.PostForm("create_by")
-	// updated_by:=c.PostForm("create_by")
-
-
-
+	create_at:=time.Now().Format(time.RFC1123)
+	name:=c.PostForm("name")
 	user := model.User{}
-	//SetValueUser(email,password,facebook_id,profile_id,create_at,update_at,create_by,update_by string)
-	user.SetValueUser(profile_id,email, pass, facebookid,profile_id,create_at,updated_at,"","")
+	//SetValueUser(email,password,facebook_id,profile_id,create_at string)
+	user.SetValueUser(profile_id,email, pass, facebookid,profile_id,create_at)
 
-	// SetValueProfile(id,phone_number,contact_emal,address,create_at,update_at,create_by,update_by
+	// SetValueProfile(id,name,phone_number,contact_emal,address,create_at,update_at)
 	profile:=model.Profile{}
-	profile.SetValueProfile(profile_id,"","","","","","","")
-	user.SetProf(profile)
+	profile.SetValueProfile(profile_id,name,"","","",create_at,"")
 	err,message:=controller.InsertAnUser(user)
-	if err{
+	if err&&controller.InsertAProfile(profile){
 		c.JSON(http.StatusOK, gin.H{
 		"message":message,
 		"status":  http.StatusOK})
 	}else{
 		c.JSON(http.StatusOK,gin.H{
 		"message":message,
-		"status":http.StatusOK})
+		"status":http.StatusNotFound})
 	}
 
 }
 
-	
-
 func GetLoginAnUser(c *gin.Context) {
-	sdt := c.Query("email")
+	email := c.Query("email")
 	password := c.Query("pass")
-	err,user:=controller.GetAnUser(sdt, password)
-	
-	if err {
-		c.JSON(http.StatusOK,user)
+	succ,user:=controller.GetAnUser(email, password)
+	succ2,pro:=controller.GetProfileWithUser(user.Profile_id)
+	if succ &&succ2{
+		c.JSON(http.StatusOK,gin.H{
+			"user":user,
+			"profile":pro})
 	}else{
-		c.String(http.StatusNotFound,"Vui long nhap lai")
+		c.String(http.StatusNotFound,"Thông tin chưa chính xác")
 	}
 }
 
@@ -76,7 +71,7 @@ func InsertACategory(c *gin.Context) {
 	category.SetValueCategory(id,name,create_at,updated_at,icon_id)
 	if controller.InsertACategory(category){
 		c.JSON(http.StatusOK,gin.H{
-		"updated_at":updated_at,
+		"message":"Success",
 		"status":http.StatusOK})
 	}else{
 		c.JSON(http.StatusOK,gin.H{
@@ -92,4 +87,8 @@ func GetCategorys(c *gin.Context) {
 	}else{
 		c.String(http.StatusNotFound,"Page Not Found")
 	}
+}
+
+func UpdateProfile(c *gin.Context) {
+	
 }

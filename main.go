@@ -19,6 +19,7 @@ func main() {
 	{
 		rgroup.POST("/newuser", route.InsertAnUserRouter)
 		rgroup.POST("/newcate", route.InsertACategory)
+		rgroup.POST("/upprofile",route.UpdateProfile)
 	}
 
 	// r.Run(":"+port)
