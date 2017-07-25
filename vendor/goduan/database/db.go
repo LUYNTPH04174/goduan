@@ -63,6 +63,17 @@ func (uc *UserController) GetAnUser(email, pass string) (bool,model.User) {
 	return true,user
 }
 
+func (uc *UserController) GetAnUserByFace(face_id string) (bool,model.User) {
+	c := uc.session.DB(AuthDatabase).C("users")
+	user := model.User{}
+	err := c.Find(bson.M{"facebook_id": face_id}).Select(nil).One(&user)
+	if err != nil{
+		return false,user
+	}
+
+	return true,user
+}
+
 func (uc *UserController) InsertACategory(category model.Category) bool{
 	err:=uc.session.DB(AuthDatabase).C("category").Insert(category)
 		if err != nil {
@@ -115,6 +126,21 @@ func (uc *UserController) GetCategoryCount() int {
 	return count
 }
 
-// func (uc *UserController) UpdateProfileValue(pro Profile) (bool,mess){
-	
-// }
+func (uc *UserController) UpdateProfileValue(profile_id string,pro model.Profile) (bool,string){
+	c:=uc.session.DB(AuthDatabase).C("profile")
+	err := c.Update(bson.M{"profile_id": profile_id}, &pro)  
+	if err!=nil{
+		return false,"False !"
+	}
+	return true,"Success !"
+}
+
+func(uc *UserController) FindToken(token string) (bool,string){
+	user:=model.User{}
+	c:=uc.session.DB(AuthDatabase).C("users")
+	err := c.Find(bson.M{"token":token}).Select(nil).One(&user)
+	if err!=nil{
+		return false,"Forbiden!"
+	}
+	return true,""
+}

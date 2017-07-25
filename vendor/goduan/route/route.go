@@ -8,6 +8,7 @@ import (
 	"strconv"
 	// "encoding/json"
 	"time"
+	"fmt"
 )
 
 var controller = database.NewUserController()
@@ -49,14 +50,27 @@ func InsertAnUserRouter(c *gin.Context) {
 func GetLoginAnUser(c *gin.Context) {
 	email := c.Query("email")
 	password := c.Query("pass")
-	succ,user:=controller.GetAnUser(email, password)
-	succ2,pro:=controller.GetProfileWithUser(user.Profile_id)
-	if succ &&succ2{
-		c.JSON(http.StatusOK,gin.H{
-			"user":user,
-			"profile":pro})
+	if email==""||password==""{
+		facebookid:=c.Query("facebook_id")
+		succ,user:=controller.GetAnUserByFace(facebookid)
+		succ2,pro:=controller.GetProfileWithUser(user.Profile_id)
+		if succ &&succ2{
+			c.JSON(http.StatusOK,gin.H{
+				"user":user,
+				"profile":pro})
+		}else{
+			c.String(http.StatusNotFound,"Thông tin chưa chính xác")
+		}
 	}else{
-		c.String(http.StatusNotFound,"Thông tin chưa chính xác")
+		succ,user:=controller.GetAnUser(email, password)
+		succ2,pro:=controller.GetProfileWithUser(user.Profile_id)
+		if succ &&succ2{
+			c.JSON(http.StatusOK,gin.H{
+				"user":user,
+				"profile":pro})
+		}else{
+			c.String(http.StatusNotFound,"Thông tin chưa chính xác")
+		}
 	}
 }
 
@@ -89,6 +103,30 @@ func GetCategorys(c *gin.Context) {
 	}
 }
 
-// func UpdateProfile(c *gin.Context) {
-	
-// }
+func UpdateProfile(c *gin.Context) {
+	//(id,name,phone_number,contact_email,address,create_at,update_at )
+	token:=c.Query("token")
+	fmt.Println(token)
+	auth,mes:=controller.FindToken(token)
+	if !auth{
+		c.JSON(http.StatusForbidden,mes)
+	}else{
+		id:=c.PostForm("profile_id")
+		name:=c.PostForm("name")
+		phone_number:=c.PostForm("phone_number")
+		address:=c.PostForm("address")
+		email:=c.PostForm("contact_email")
+		create_at:=c.PostForm("create_at")
+		update_at:=time.Now().Format(time.RFC1123)
+		
+		profile:=model.Profile{}
+		profile.SetValueProfile(id,name,phone_number,address,email,create_at,update_at)
+		suc,message:=controller.UpdateProfileValue(id,profile)
+
+		if suc{
+			c.JSON(http.StatusOK,message)
+		}else{
+			c.JSON(http.StatusForbidden,message)
+		}
+	}
+}
