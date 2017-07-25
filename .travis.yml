@@ -13,15 +13,11 @@ before_install:
   - go get -v gopkg.in/mgo.v2
   - go get -v github.com/gin-gonic/gin
   - go get -v github.com/kardianos/govendor
-before_script:
-  - npm install -g firebase-tools
 script:
   # - ./pre-commit
   - govendor list
   - go test -cpu=1,2 -v -tags integration ./...
   - ip a
-after_success:
-  - firebase deploy --token $FIREBASE_TOKEN
 os:
   - linux
 
@@ -29,9 +25,3 @@ addons:
     packages:
       - iproute2
 
-deploy:
-  skip_cleanup: true
-  provider: firebase
-  token:
-    secure: "1/mykap_z1UyWlwU4uj-SdSGxzwfufioDubj51hru3dXg"
-  project: "weedz"

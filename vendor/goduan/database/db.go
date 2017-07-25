@@ -40,19 +40,68 @@ func NewUserController() *UserController {
 	return &UserController{session}
 }
 
-func (uc *UserController) InsertAnUser(user model.User) {
-	uc.session.DB(AuthDatabase).C("users").Insert(user)
-
+func (uc *UserController) InsertAnUser(user model.User) (bool,string){
+	exist:=uc.session.DB(AuthDatabase).C("users").Find(bson.M{"email":user.Email}).Select(nil).One(&model.User{})
+	if exist==nil{
+		return false,"Email da duoc su dung"
+	}
+	err:=uc.session.DB(AuthDatabase).C("users").Insert(user)
+	if err != nil {
+		return false,"loi"
+	}
+	return true,"thanh cong"
 }
 
-func (uc *UserController) GetAnUser(email, pass string) bool {
+func (uc *UserController) GetAnUser(email, pass string) (bool,model.User) {
 	c := uc.session.DB(AuthDatabase).C("users")
-	result := model.User{}
+	user := model.User{}
+	err := c.Find(bson.M{"email": email}).Select(nil).One(&user)
+	if err != nil{
+		return false,user
+	}
 
-	err := c.Find(bson.M{"sdt": email}).Select(bson.M{"password": pass}).One(&result)
-	if err != nil {
+	return true,user
+}
+
+func (uc *UserController) InsertACategory(category model.Category) bool{
+	err:=uc.session.DB(AuthDatabase).C("category").Insert(category)
+		if err != nil {
 		return false
 	}
 
 	return true
+}
+
+func (uc *UserController) InsertAProfile(profile model.Profile) bool{
+	err:=uc.session.DB(AuthDatabase).C("profile").Insert(profile)
+		if err != nil {
+		return false
+	}
+
+	return true
+}
+
+
+
+
+func(uc *UserController) GetAllCategory()	([]model.Category,int){
+	 var results []model.Category	
+	c:=uc.session.DB(AuthDatabase).C("category")
+	err:=c.Find(nil).All(&results)
+	if err!=nil {
+		return results,0
+	}
+	return results,1
+}
+
+func (uc *UserController) GetUsersCount() int {
+	count,_:=uc.session.DB(AuthDatabase).C("users").Count()
+
+	return count
+}
+
+func (uc *UserController) GetCategoryCount() int {
+	count,_:=uc.session.DB(AuthDatabase).C("category").Count()
+
+	return count
 }
