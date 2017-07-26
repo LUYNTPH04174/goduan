@@ -117,12 +117,13 @@ func UpdateProfile(c *gin.Context) {
 		name:=c.PostForm("name")
 		phone_number:=c.PostForm("phone_number")
 		address:=c.PostForm("address")
-		email:=c.PostForm("contact_email")
 		create_at:=c.PostForm("create_at")
 		update_at:=time.Now().Format(time.RFC1123)
 		avatar_id:=c.PostForm("avatar_id")
 		profile:=model.Profile{}
-		profile.SetValueProfile("",name,phone_number,address,email,create_at,update_at)
+
+		//(id,name,phone_number,contact_email,address,create_at,update_at
+		profile.SetValueProfile("",name,phone_number,"",address,create_at,update_at)
 		profile.SetAvatarID(avatar_id)
 		suc,message:=controller.UpdateProfileValue(token,profile)
 
@@ -137,3 +138,13 @@ func UpdateProfile(c *gin.Context) {
 		}
 	
 }
+
+// func GetProfileUser(){
+// 	profile_id:=c.Query("id")
+// 	err,message:=controller.GetProfileWithId(profile_id)
+// 	if err{
+// 		c.JSON(http.StatusNotFound,gin.H{
+// 			"message":message,
+// 			"status":http.StatusNotFound})
+// 	}
+// }

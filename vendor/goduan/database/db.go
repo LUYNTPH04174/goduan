@@ -104,6 +104,16 @@ func (uc *UserController) GetProfileWithUser(profile_id string) (bool,model.Prof
 	return true,pro
 }
 
+func (uc *UserController) GetProfileWithId(profile_id string) (bool,model.Profile) {
+	c := uc.session.DB(AuthDatabase).C("profile")
+	pro := model.Profile{}
+	err := c.Find(bson.M{"_id":profile_id}).Select(nil).One(&pro)
+	if err != nil{
+		return false,pro
+	}
+
+	return true,pro
+}
 
 func(uc *UserController) GetAllCategory()	([]model.Category,int){
 	 var results []model.Category	
@@ -130,10 +140,9 @@ func (uc *UserController) GetCategoryCount() int {
 func (uc *UserController) UpdateProfileValue(profile_id string,pro model.Profile) (bool,string){
 	c:=uc.session.DB(AuthDatabase).C("profile")
 	dataId := bson.ObjectIdHex(profile_id)
-	updatetor:=bson.M{"$set": bson.M{"phone_number":pro.Phone_number,
-	"address":pro.Address,"contact_email":pro.Contact_email,"updated_at":pro.Updated_at,"avatar_id":pro.Avatar_id}}
-	// ,"contact_emal":pro.Contact_emal,"address":pro.Address,
-	// "update_at":pro.Update_at,"avatar_id":pro.Avatar_id}}
+	updatetor:=bson.M{"$set": bson.M{"phone_number":pro.Phone_number,"name":pro.Name,
+	"address":pro.Address,"updated_at":pro.Updated_at,"avatar_id":pro.Avatar_id}}
+	
 	err := c.UpdateId(dataId, updatetor)  
 	if err!=nil{
 		fmt.Println(err)
