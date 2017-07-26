@@ -104,17 +104,6 @@ func (uc *UserController) GetProfileWithUser(profile_id string) (bool,model.Prof
 	return true,pro
 }
 
-func (uc *UserController) GetProfileWithId(profile_id string) (bool,model.Profile) {
-	c := uc.session.DB(AuthDatabase).C("profile")
-	pro := model.Profile{}
-	err := c.Find(bson.M{"_id":profile_id}).Select(nil).One(&pro)
-	if err != nil{
-		return false,pro
-	}
-
-	return true,pro
-}
-
 func(uc *UserController) GetAllCategory()	([]model.Category,int){
 	 var results []model.Category	
 	c:=uc.session.DB(AuthDatabase).C("category")

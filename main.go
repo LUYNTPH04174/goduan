@@ -15,7 +15,7 @@ func main() {
 	r.GET("/", route.HomeDefault)
 	r.GET("/login", route.GetLoginAnUser)
 	r.GET("/categorys", route.GetCategorys)
-	// r.GET("profile",route.GetProfileUser)
+	r.GET("profile",route.GetProfileUser)
 	rgroup := r.Group("/api")
 	{
 		rgroup.POST("/newuser", route.InsertAnUserRouter)

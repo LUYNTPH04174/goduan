@@ -5,11 +5,11 @@ import (
 type Category struct{
  	Id  bson.ObjectId `json:"id" bson:"_id"`
 	Id_category string `form:"id_category" json:"id_category" bson:"id_category"`
-	Category_name string `form"category_name" json:"category_name" bson:"category_name"`
+	Category_name string `form:"category_name" json:"category_name" bson:"category_name"`
 	Create_at string `form:"create_at" json:"create_at" bson:"create_at"`
 	Updated_at string `form:"updated_at" json:"updated_at" bson:"updated_at"`
-	Create_by		string 		`form:"create_by" 		json:"create_by" 	bson:"create_by"`
-	Update_by		string 		`form:"update_by" 		json:"update_by" 	bson:"update_by"`
+	Create_by string `form:"create_by" json:"create_by" bson:"create_by"`
+	Update_by string `form:"update_by" json:"update_by" bson:"update_by"`
 	Icon_id string `form:"icon_id" json:"icon_id" bson:"icon_id"`
 }	
 

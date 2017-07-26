@@ -25,3 +25,6 @@ func (detail *PostDetail) SetValueDetail(title,des,category_id,create_at,create_
 	detail.Profile_Id=profile_id
 }
 
+func (detail *PostDetail) SetImages(list []string){
+	detail.Images=list
+}

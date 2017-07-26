@@ -8,7 +8,6 @@ import (
 	"strconv"
 	// "encoding/json"
 	"time"
-	"fmt"
 )
 
 var controller = database.NewUserController()
@@ -32,6 +31,7 @@ func InsertAnUserRouter(c *gin.Context) {
 	profile:=model.Profile{}
 	profile.SetValueProfile(user_id,name,"","","",create_at,"")
 	profile_id:=profile.Id.Hex()
+	
 	//SetValueUser(email,password,facebook_id,profile_id,create_at string)
 	user.SetValueUser(user_id,email, pass, facebookid,profile_id,create_at)
 
@@ -55,7 +55,7 @@ func GetLoginAnUser(c *gin.Context) {
 		facebookid:=c.Query("facebook_id")
 		succ,user:=controller.GetAnUserByFace(facebookid)
 		succ2,pro:=controller.GetProfileWithUser(user.Id_user)
-		fmt.Println(succ,succ2,user.Id_user)
+		
 		if succ &&succ2{
 			c.JSON(http.StatusOK,gin.H{
 				"user":user,
@@ -67,7 +67,7 @@ func GetLoginAnUser(c *gin.Context) {
 	}else{
 		succ,user:=controller.GetAnUser(email, password)
 		succ2,pro:=controller.GetProfileWithUser(user.Id_user)
-		fmt.Println(succ,succ2,user.Id_user)
+		
 		if succ &&succ2{
 			c.JSON(http.StatusOK,gin.H{
 				"user":user,
@@ -139,12 +139,16 @@ func UpdateProfile(c *gin.Context) {
 	
 }
 
-// func GetProfileUser(){
-// 	profile_id:=c.Query("id")
-// 	err,message:=controller.GetProfileWithId(profile_id)
-// 	if err{
-// 		c.JSON(http.StatusNotFound,gin.H{
-// 			"message":message,
-// 			"status":http.StatusNotFound})
-// 	}
-// }
+func GetProfileUser(c *gin.Context){
+	profile_id:=c.Query("id")
+	err,message:=controller.GetProfileWithUser(profile_id)
+	if err{
+		c.JSON(http.StatusOK,gin.H{
+			"message":message,
+			"status":http.StatusOK})
+	}else{
+		c.JSON(http.StatusOK,gin.H{
+			"message":"Not Found!",
+			"status":http.StatusNotFound})
+	}
+}
