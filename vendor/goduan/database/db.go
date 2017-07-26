@@ -7,6 +7,7 @@ import (
 	"goduan/model"
 	"log"
 	"time"
+	"fmt"
 )
 
 const (
@@ -95,7 +96,7 @@ func (uc *UserController) InsertAProfile(profile model.Profile) bool{
 func (uc *UserController) GetProfileWithUser(profile_id string) (bool,model.Profile) {
 	c := uc.session.DB(AuthDatabase).C("profile")
 	pro := model.Profile{}
-	err := c.Find(bson.M{"profile_id": profile_id}).Select(nil).One(&pro)
+	err := c.Find(bson.M{"profile_stt": profile_id}).Select(nil).One(&pro)
 	if err != nil{
 		return false,pro
 	}
@@ -128,8 +129,14 @@ func (uc *UserController) GetCategoryCount() int {
 
 func (uc *UserController) UpdateProfileValue(profile_id string,pro model.Profile) (bool,string){
 	c:=uc.session.DB(AuthDatabase).C("profile")
-	err := c.Update(bson.M{"profile_id": profile_id}, &pro)  
+	dataId := bson.ObjectIdHex(profile_id)
+	updatetor:=bson.M{"$set": bson.M{"phone_number":pro.Phone_number,
+	"address":pro.Address,"contact_email":pro.Contact_email,"updated_at":pro.Updated_at,"avatar_id":pro.Avatar_id}}
+	// ,"contact_emal":pro.Contact_emal,"address":pro.Address,
+	// "update_at":pro.Update_at,"avatar_id":pro.Avatar_id}}
+	err := c.UpdateId(dataId, updatetor)  
 	if err!=nil{
+		fmt.Println(err)
 		return false,"False !"
 	}
 	return true,"Success !"
@@ -142,5 +149,5 @@ func(uc *UserController) FindToken(token string) (bool,string){
 	if err!=nil{
 		return false,"Forbiden!"
 	}
-	return true,""
+	return true,"Accept"
 }

@@ -24,16 +24,17 @@ func InsertAnUserRouter(c *gin.Context) {
 	email := c.PostForm("email")
 	pass := c.PostForm("pass")
 	facebookid := c.PostForm("facebook_id")
-	profile_id:=strconv.Itoa(controller.GetUsersCount()+1)
+	user_id:=strconv.Itoa(controller.GetUsersCount()+1)
 	create_at:=time.Now().Format(time.RFC1123)
 	name:=c.PostForm("name")
 	user := model.User{}
-	//SetValueUser(email,password,facebook_id,profile_id,create_at string)
-	user.SetValueUser(profile_id,email, pass, facebookid,profile_id,create_at)
-
 	// SetValueProfile(id,name,phone_number,contact_emal,address,create_at,update_at)
 	profile:=model.Profile{}
-	profile.SetValueProfile(profile_id,name,"","","",create_at,"")
+	profile.SetValueProfile(user_id,name,"","","",create_at,"")
+	profile_id:=profile.Id.Hex()
+	//SetValueUser(email,password,facebook_id,profile_id,create_at string)
+	user.SetValueUser(user_id,email, pass, facebookid,profile_id,create_at)
+
 	err,message:=controller.InsertAnUser(user)
 	if err&&controller.InsertAProfile(profile){
 		c.JSON(http.StatusOK, gin.H{
@@ -53,23 +54,27 @@ func GetLoginAnUser(c *gin.Context) {
 	if email==""||password==""{
 		facebookid:=c.Query("facebook_id")
 		succ,user:=controller.GetAnUserByFace(facebookid)
-		succ2,pro:=controller.GetProfileWithUser(user.Profile_id)
+		succ2,pro:=controller.GetProfileWithUser(user.Id_user)
+		fmt.Println(succ,succ2,user.Id_user)
 		if succ &&succ2{
 			c.JSON(http.StatusOK,gin.H{
 				"user":user,
 				"profile":pro})
 		}else{
-			c.String(http.StatusNotFound,"Thông tin chưa chính xác")
+			c.JSON(http.StatusNotFound,gin.H{"message":"Thông tin chưa chính xác",
+				"status":http.StatusOK})
 		}
 	}else{
 		succ,user:=controller.GetAnUser(email, password)
-		succ2,pro:=controller.GetProfileWithUser(user.Profile_id)
+		succ2,pro:=controller.GetProfileWithUser(user.Id_user)
+		fmt.Println(succ,succ2,user.Id_user)
 		if succ &&succ2{
 			c.JSON(http.StatusOK,gin.H{
 				"user":user,
 				"profile":pro})
 		}else{
-			c.String(http.StatusNotFound,"Thông tin chưa chính xác")
+			c.JSON(http.StatusNotFound,gin.H{"message":"Thông tin chưa chính xác",
+				"status":http.StatusOK})
 		}
 	}
 }
@@ -99,34 +104,36 @@ func GetCategorys(c *gin.Context) {
 	if err==1{
 		c.JSON(http.StatusOK,results)
 	}else{
-		c.String(http.StatusNotFound,"Page Not Found")
+		c.JSON(http.StatusNotFound,gin.H{
+			"message":"Page Not Found",
+			"status":http.StatusNotFound})
 	}
 }
 
 func UpdateProfile(c *gin.Context) {
 	//(id,name,phone_number,contact_email,address,create_at,update_at )
 	token:=c.Query("token")
-	fmt.Println(token)
-	auth,mes:=controller.FindToken(token)
-	if !auth{
-		c.JSON(http.StatusForbidden,mes)
-	}else{
-		id:=c.PostForm("profile_id")
+	
 		name:=c.PostForm("name")
 		phone_number:=c.PostForm("phone_number")
 		address:=c.PostForm("address")
 		email:=c.PostForm("contact_email")
 		create_at:=c.PostForm("create_at")
 		update_at:=time.Now().Format(time.RFC1123)
-		
+		avatar_id:=c.PostForm("avatar_id")
 		profile:=model.Profile{}
-		profile.SetValueProfile(id,name,phone_number,address,email,create_at,update_at)
-		suc,message:=controller.UpdateProfileValue(id,profile)
+		profile.SetValueProfile("",name,phone_number,address,email,create_at,update_at)
+		profile.SetAvatarID(avatar_id)
+		suc,message:=controller.UpdateProfileValue(token,profile)
 
 		if suc{
-			c.JSON(http.StatusOK,message)
+			c.JSON(http.StatusOK,gin.H{
+				"message":message,
+				"status":http.StatusOK})
 		}else{
-			c.JSON(http.StatusForbidden,message)
+			c.JSON(http.StatusForbidden,gin.H{
+				"message":message,
+				"status":http.StatusNotFound})
 		}
-	}
+	
 }

@@ -13,7 +13,7 @@ type User struct {
 	Facebook_id string `form:"facebook_id" json:"facebook_id" bson:"facebook_id"`
 	Profile_id string `form:"profile_id" json:"profile_id" bson:"profile_id"`
 	Create_at string `form:"create_at" json:"create_at" bson:"create_at"`
-	Token bson.ObjectId `json:"token" bson:"token"`
+	Token string `json:"token" bson:"token"`
 }
 
 func (user *User) SetValueUser(id,email,password,facebook_id,profile_id,create_at string) {
@@ -24,7 +24,7 @@ func (user *User) SetValueUser(id,email,password,facebook_id,profile_id,create_a
 	user.Facebook_id = facebook_id
 	user.Profile_id = profile_id
 	user.Create_at = create_at
-	user.Token=bson.NewObjectId()
+	user.Token=user.Id.Hex()
 }
 
 func (user *User) GetEmail() string {
