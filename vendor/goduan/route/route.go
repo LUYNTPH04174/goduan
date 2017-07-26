@@ -29,9 +29,9 @@ func InsertAnUserRouter(c *gin.Context) {
 	user := model.User{}
 	// SetValueProfile(id,name,phone_number,contact_emal,address,create_at,update_at)
 	profile:=model.Profile{}
-	profile.SetValueProfile(user_id,name,"","","",create_at,"")
+	profile.SetValueProfile(user_id,name,"",email,"",create_at,"")
 	profile_id:=profile.Id.Hex()
-	
+
 	//SetValueUser(email,password,facebook_id,profile_id,create_at string)
 	user.SetValueUser(user_id,email, pass, facebookid,profile_id,create_at)
 
