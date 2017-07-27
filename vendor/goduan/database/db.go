@@ -105,7 +105,7 @@ func (uc *UserController) GetProfileWithUser(profile_id string) (bool,model.Prof
 }
 
 func(uc *UserController) GetAllCategory()	([]model.Category,int){
-	 var results []model.Category	
+	var results []model.Category	
 	c:=uc.session.DB(AuthDatabase).C("category")
 	err:=c.Find(nil).All(&results)
 	if err!=nil {
@@ -140,12 +140,37 @@ func (uc *UserController) UpdateProfileValue(profile_id string,pro model.Profile
 	return true,"Success !"
 }
 
-func(uc *UserController) FindToken(token string) (bool,string){
+func(uc *UserController) FindToken(token string) (bool,string,model.Profile){
 	user:=model.User{}
 	c:=uc.session.DB(AuthDatabase).C("users")
 	err := c.Find(bson.M{"token":token}).Select(nil).One(&user)
-	if err!=nil{
-		return false,"Forbiden!"
+
+	c2 := uc.session.DB(AuthDatabase).C("profile")
+	pro := model.Profile{}
+	err2 := c2.Find(bson.M{"profile_stt": user.Id_user}).Select(nil).One(&pro)
+
+	if err!=nil||err2!=nil{
+		return false,"Forbiden!",pro
 	}
-	return true,"Accept"
+	return true,"Accept",pro
+}
+
+func (uc *UserController) AddANewDetail(pos model.PostDetail) (bool,string){
+	c:=uc.session.DB(AuthDatabase).C("detail")
+	err:=c.Insert(pos)
+		if err != nil {
+		return false,"False !"
+	}
+
+	return true,"Success !"
+}
+
+func (uc *UserController) GetPostDetailByCategory(category_id string) (int,[]model.PostDetail){
+	var results []model.PostDetail	
+	c:=uc.session.DB(AuthDatabase).C("detail")
+	err:=c.Find(bson.M{"category_id":category_id}).All(&results)
+	if err!=nil {
+		return 0,results
+	}
+	return 1,results
 }

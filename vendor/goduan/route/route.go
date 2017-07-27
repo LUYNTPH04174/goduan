@@ -8,6 +8,7 @@ import (
 	"strconv"
 	// "encoding/json"
 	"time"
+	
 )
 
 var controller = database.NewUserController()
@@ -149,6 +150,60 @@ func GetProfileUser(c *gin.Context){
 	}else{
 		c.JSON(http.StatusOK,gin.H{
 			"message":"Not Found!",
+			"status":http.StatusNotFound})
+	}
+}
+
+func InsertAPostDetail(c *gin.Context) {
+	token:=c.Query("token")
+	auth,mes,profile:=controller.FindToken(token)
+    
+    if !auth{
+    	c.JSON(http.StatusOK,gin.H{
+			"message":mes,
+			"status":http.StatusOK})
+    }
+
+	title:=c.PostForm("title")
+	category_id:=c.PostForm("category_id")
+	create_at:=time.Now().Format(time.RFC1123)
+	create_by:=profile.Name
+	profile_id:=profile.Profile_Stt
+	images:=c.PostForm("images")
+
+	detail:=model.PostDetail{}
+//(title,description,category_id,create_at,create_by,profile_id )
+	detail.SetValueInfo(title,category_id,create_at,create_by,profile_id)
+	detail.SetImages(images)
+
+	description:=c.PostForm("description")
+	place:=c.PostForm("place")
+	requirement:=c.PostForm("requirement")
+	benefits:=c.PostForm("benefits")
+	time_limited:=c.PostForm("time_limited")
+//(place,description,requirement,benefits,time_limited )
+	detail.SetValueDetail(place,description,requirement,benefits,time_limited)
+
+	succ,message:=controller.AddANewDetail(detail)
+	if succ{
+		c.JSON(http.StatusOK,gin.H{
+			"message":message,
+			"status":http.StatusOK})
+	}else{
+		c.JSON(http.StatusOK,gin.H{
+			"message":message,
+			"status":http.StatusNotFound})
+	}
+}
+
+func GetListDetailByCategory(c *gin.Context) {
+	category_id:=c.Query("category_id")
+	succ,results:=controller.GetPostDetailByCategory(category_id)
+	if succ==1 {
+		c.JSON(http.StatusOK,results)
+	}else{
+		c.JSON(http.StatusOK,gin.H{
+			"message":results,
 			"status":http.StatusNotFound})
 	}
 }
