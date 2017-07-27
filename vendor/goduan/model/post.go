@@ -2,7 +2,7 @@ package model
 
 import (
  "gopkg.in/mgo.v2/bson"
- "strings"
+ //"strings"
 )
 
 type PostDetail struct {
@@ -13,7 +13,7 @@ type PostDetail struct {
 	Created_at	string 	`form:"created_at" json:"created_at" bson:"created_at"`
 	Created_by 	string 	`form:"created_by" json:"created_by" bson:"created_by"`
 	Profile_Id	string 	`form:"profile_id" json:"profile_id" bson:"profile_id"`
-	Images 	[]string `json:"images" bson:"images"`
+	Images 	string `json:"images" bson:"images"`
 	Place string 	`form:"place" json:"place" bson:"place"`
 	Requirement	string `form:"requirement" json:"requirement" bson:"requirement"`
 	Benefits	string `form:"benefits" json:"benefits" bson:"benefits"`
@@ -39,5 +39,6 @@ func (detail *PostDetail) SetValueDetail(place,description,requirement,benefits,
 }
 
 func (detail *PostDetail) SetImages(indata string){
-	detail.Images=strings.Split(indata,",")
+	detail.Images=indata
+	// detail.Images=strings.Split(indata,",")
 }
