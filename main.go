@@ -12,10 +12,11 @@ func main() {
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
 
+	r.GET("/", route.HomeDefault)
 	r.GET("/login", route.GetLoginAnUser)
 	r.GET("/categorys", route.GetCategorys)
 	r.GET("profile",route.GetProfileUser)
-	r.GET("/",route.GetListDetailByCategory)
+	r.GET("/list",route.GetListDetailByCategory)
 	rgroup := r.Group("/api")
 	{
 		rgroup.POST("/newuser", route.InsertAnUserRouter)
