@@ -19,7 +19,9 @@ func HomeDefault(c *gin.Context) {
 		"status":  http.StatusOK})
 }
 
-
+func Authnizon(){
+	
+}
 func InsertAnUserRouter(c *gin.Context) {
 	email := c.PostForm("email")
 	pass := c.PostForm("pass")
@@ -181,8 +183,9 @@ func InsertAPostDetail(c *gin.Context) {
 	requirement:=c.PostForm("requirement")
 	benefits:=c.PostForm("benefits")
 	time_limited:=c.PostForm("time_limited")
+	contact:=c.PostForm("contact")
 //(place,description,requirement,benefits,time_limited )
-	detail.SetValueDetail(place,description,requirement,benefits,time_limited)
+	detail.SetValueDetail(place,description,requirement,benefits,time_limited,contact)
 
 	succ,message:=controller.AddANewDetail(detail)
 	if succ{

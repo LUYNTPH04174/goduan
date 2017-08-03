@@ -18,6 +18,7 @@ type PostDetail struct {
 	Requirement	string `form:"requirement" json:"requirement" bson:"requirement"`
 	Benefits	string `form:"benefits" json:"benefits" bson:"benefits"`
 	Time_limited string `form:"time_limited" json:"time_limited" bson:"time_limited"`
+	Contact string `form:"contact" json:"contact" bson:"contact"`
 }
 
 func (detail *PostDetail) SetValueInfo(title,category_id,create_at,create_by,profile_id string) {
@@ -30,12 +31,13 @@ func (detail *PostDetail) SetValueInfo(title,category_id,create_at,create_by,pro
 }
 
 
-func (detail *PostDetail) SetValueDetail(place,description,requirement,benefits,time_limited string){
+func (detail *PostDetail) SetValueDetail(place,description,requirement,benefits,time_limited,contact string){
 	detail.Place=place
 	detail.Description=description
 	detail.Requirement=requirement
 	detail.Benefits=benefits
 	detail.Time_limited=time_limited
+	detail.Contact=contact
 }
 
 func (detail *PostDetail) SetImages(indata string){
