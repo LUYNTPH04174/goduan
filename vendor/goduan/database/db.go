@@ -174,3 +174,14 @@ func (uc *UserController) GetPostDetailByCategory(category_id string) (int,[]mod
 	}
 	return 1,results
 }
+
+func (uc *UserController) FindListDetail(title string) (int,[]model.PostDetail){
+	var results []model.PostDetail
+	c:=uc.session.DB(AuthDatabase).C("detail")
+	err:=c.Find(bson.M{"title": bson.RegEx{title, ""}}).Iter().All(&results)
+	if err!=nil{
+		return 0,results
+	}
+	return 1,results
+}
+	

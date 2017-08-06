@@ -210,3 +210,15 @@ func GetListDetailByCategory(c *gin.Context) {
 			"status":http.StatusNotFound})
 	}
 }
+
+func SearchPost(c * gin.Context) {
+	title:=c.Query("title")
+	succ,results:=controller.FindListDetail(title)
+	if succ==1 {
+		c.JSON(http.StatusOK,results)
+	}else{
+		c.JSON(http.StatusOK,gin.H{
+			"message":"Không có công việc tương tự !",
+			"status":http.StatusNotFound})
+	}
+}
