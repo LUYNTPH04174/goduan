@@ -184,4 +184,12 @@ func (uc *UserController) FindListDetail(title string) (int,[]model.PostDetail){
 	}
 	return 1,results
 }
-	
+
+func (uc *UserController) AddAFeed(feed model.FeedBack) (bool,string){
+	c:=uc.session.DB(AuthDatabase).C("feedback")
+	err:=c.Insert(feed)
+		if err != nil {
+		return false,"False !"
+	}
+	return true,"Success !"
+}

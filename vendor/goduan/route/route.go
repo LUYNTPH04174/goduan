@@ -222,3 +222,23 @@ func SearchPost(c * gin.Context) {
 		c.JSON(http.StatusOK,results)
 	}
 }
+
+
+func InsertAFeedBack(c *gin.Context) {
+	name:=c.PostForm("name")
+	email:=c.PostForm("email")
+	message:=c.PostForm("message")
+	
+	feed:=model.FeedBack{}
+	feed.SetValue(name,email,message)
+	err,mes:=controller.AddAFeed(feed)
+	if err{
+		c.JSON(http.StatusOK,gin.H{
+		"message":mes,
+		"status":http.StatusOK})
+	}else{
+		c.JSON(http.StatusOK,gin.H{
+		"message":mes,
+		"status":http.StatusOK})
+	}
+}

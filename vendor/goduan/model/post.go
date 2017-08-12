@@ -20,6 +20,19 @@ type PostDetail struct {
 	Time_limited string `form:"time_limited" json:"time_limited" bson:"time_limited"`
 	Contact string `form:"contact" json:"contact" bson:"contact"`
 }
+type FeedBack struct {
+	Id bson.ObjectId `json:"id" bson:"_id"`
+	Name string `form:"name" json:"title" bson:"name"`
+	Email string `form:"email" json:"email" bson:"email"`
+	Message string `form:"message" json:"message" bson:"message"`
+}
+
+func (feed *FeedBack) SetValue(name,email,message string) {
+	feed.Id=bson.NewObjectId()
+	feed.Name=name
+	feed.Email=email
+	feed.Message=message
+}
 
 func (detail *PostDetail) SetValueInfo(title,category_id,create_at,create_by,profile_id string) {
 	detail.Id=bson.NewObjectId()

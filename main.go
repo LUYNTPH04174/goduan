@@ -26,6 +26,7 @@ func main() {
 		rgroup.POST("/newcate", route.InsertACategory)
 		rgroup.POST("/upprofile",route.UpdateProfile)
 		rgroup.POST("/post",route.InsertAPostDetail)
+		rgroup.POST("/feed",route.InsertAFeedBack)
 	}
 
 	 s := &http.Server{
